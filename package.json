@@ -1,0 +1,21 @@
+{
+  "name": "nodecms",
+  "version": "1.0.0",
+  "description": "A node framework for API creation",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node -r esm ./src/app.js"
+  },
+  "author": "Ravi Baranwal",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "mongodb": "^3.5.4",
+    "mongoose": "^5.9.3",
+    "nvm": "0.0.4",
+    "twilio": "^3.40.0"
+  }
+}
