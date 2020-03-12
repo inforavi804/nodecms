@@ -19,6 +19,7 @@
     "mongoose": "^5.9.3",
     "nvm": "0.0.4",
     "twilio": "^3.40.0",
-    "validate": "^5.1.0"
+    "validate": "^5.1.0",
+    "validatorjs": "^3.18.1"
   }
 }

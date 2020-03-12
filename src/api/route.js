@@ -2,23 +2,15 @@ import express from 'express';
 import UserModel from '../models/User';
 import bodyParser from 'body-parser';
 
-
 // Require controller modules.
+import AppController from '../controllers/App';
 import UserController from '../controllers/User';
 
+console.log("User Model Printing here =>", UserModel);
 const userCtrl = new UserController(UserModel);
-
 
 var app 	= express();
 var route 	= express.Router();
-
-
-//console.log("route file execcuted!");
-route.get('/', function (req, res) {		
-	res.send('GET request to the route data')
-	console.log("route path url requested")
-});
-
 
 // route.post('/adduser', function (req, res) {
 // 	var requestData = req.body;
@@ -42,8 +34,10 @@ route.get('/', function (req, res) {
 //     });
 // });
 
-//Router to perform operation on users
+//Router to display main file
+//route.get('/',  AppController.index);
 
+//Router to perform operation on users
 route.get('/users',  userCtrl.getList);
 route.post('/adduser', userCtrl.create);
 

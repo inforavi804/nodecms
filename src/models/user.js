@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
+import Validator from 'validatorjs';
 
-var userSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
 	name: {
 		type: String,
      	//required: [true, 'Please enter a full name'],
@@ -27,5 +28,14 @@ var userSchema = new mongoose.Schema({
     // { timestamps: true },
 });
 
-const User = mongoose.model('User', userSchema);
+UserSchema.statics.validateCreate = (obj) => {
+	let rules = {
+	   name: 'required',
+	   username: 'required',
+	   email: 'required'
+	};
+	return new Validator(obj, rules);
+ };
+
+const User = mongoose.model('User', UserSchema);
 export default User;
