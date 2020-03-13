@@ -1,3 +1,5 @@
+import AppError from '.././helper/AppError';
+import CONSTANT from '.././constants/constants';
 
 class AppController{
 
@@ -8,13 +10,19 @@ class AppController{
     */
    constructor(model){
 		this._model  = model;
-		this.index   = this.index.bind(this);
+		//this.index   = this.index.bind(this);
 		this.create  = this.create.bind(this);
 		this.getList = this.getList.bind(this);
 	}
 
-	index(req, res){
-		res.send('Request to the main file', res);
+	/**
+    * @param {Object} req The request object
+    * @param {Object} res The response object
+    * @param {function} next The callback to the next program handler
+	*/
+
+	index(req, res) {
+		res.send("+------------ Request to the main route path ----------------+");
 	}
 
 	/**
@@ -37,12 +45,13 @@ class AppController{
 				   //return res.status(OK).json(formatResponse(meta, savedObject));
 				   res.send(object);
 	            }, (err) => {
-				   //return next(err);
-				   console.log ('Error on save!', err);
+					console.log ('Error on save!', err);
+				    return next(err);
 	            });
 	    } else {
-			/*const appError = new AppError('input errors', BAD_REQUEST, validator.errors.all());
-			return next(appError);*/
+			const appError = new AppError(CONSTANT.ERROR_TYPE, CONSTANT.BAD_REQUEST, validator.errors.all());
+			// Passing errors to Express & returning it
+			return next(appError);
 	    }
 	}
 
@@ -51,8 +60,8 @@ class AppController{
     * @param {Object} res The response object
     */
 	getList(req, res){
-		let modelObj = this._model;
-		modelObj.find({}).exec(function(err, result) {
+		let userModelObj = this._model;
+		userModelObj.find({}).exec(function(err, result) {
 			if (!err) {
 				res.send(result);
 			} else {
