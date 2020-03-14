@@ -1,4 +1,4 @@
-import AppError from '.././helper/AppError';
+//import AppError from '.././helper/AppError';
 import CONSTANT from '.././constants/constants';
 
 class AppController{
@@ -49,9 +49,12 @@ class AppController{
 				    return next(err);
 	            });
 	    } else {
-			const appError = new AppError(CONSTANT.ERROR_TYPE, CONSTANT.BAD_REQUEST, validator.errors.all());
+	    	console.log(validator.errors.all());
+			//const appError = new AppError(CONSTANT.ERROR_TYPE, CONSTANT.BAD_REQUEST, validator.errors.all());
+			const appError = validator.errors.all();
 			// Passing errors to Express & returning it
-			return next(appError);
+			res.send(appError);
+			//return next(appError);
 	    }
 	}
 

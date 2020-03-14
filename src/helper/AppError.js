@@ -1,5 +1,3 @@
-//import Error from 'error';
-
 class AppError extends Error{
 
     
