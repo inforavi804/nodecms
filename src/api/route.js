@@ -16,7 +16,10 @@ route.get('/',  userCtrl.index);
 
 //Router to perform operation on users
 route.get('/users',  userCtrl.getList);
-route.post('/adduser', userCtrl.create);
+route.post('/user/add', userCtrl.create);
+route.post('/user/update/:id', userCtrl.update);
+route.put('/user/delete/:id', userCtrl.delete);
+
 
 export default route;
 
