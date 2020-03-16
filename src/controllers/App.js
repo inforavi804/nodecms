@@ -68,22 +68,22 @@ class AppController{
     * @return {Object} res The response object
     */
     update(req, res, next){
-
-		let obj = req.body;
+		var recId = req.params.id;
+		let obj   = req.body;
 		const validator = this._model.validateCreate(obj);
 
 		if (validator.passes()) {
 
-			let object = new this._model(obj);
-			object.save()
-				.then((savedObject) => {
-				//const meta = getSuccessMeta();
-				//return res.status(OK).json(formatResponse(meta, savedObject));
-				res.send(object);
-				}, (err) => {
-					console.log ('Error on save!', err);
-					return next(err);
-				});
+			let userModelObj = this._model(obj);
+			userModelObj.find({'_id':recId}).update().exec(function(err, result) {
+
+				if (!err) {
+					res.send(result);
+					next(result);
+				} else {
+					res.send("Error ocurred on performing updaet operation", err);
+				};
+			});
 		} else {
 			console.log(validator.errors.all());
 			//const appError = new AppError(CONSTANT.ERROR_TYPE, CONSTANT.BAD_REQUEST, validator.errors.all());
@@ -104,7 +104,7 @@ class AppController{
 			if (!err) {
 				res.send(result);
 			} else {
-				// error handling
+				res.send("Error ocurred on performing updaet operation", err);
 			};
 		}); 
 	}
@@ -114,11 +114,11 @@ class AppController{
     * @param {Object} res The response object
     */
     delete(req, res, next){
-		var delId = req.params.id;
+		var recId = req.params.id;
 		//var query = req.query;
-		console.log("Id to delete item => ", req.params.id);
+		console.log("Id to delete item => ", recId);
 		let userModelObj = this._model;
-		userModelObj.find({'_id':delId}).remove().exec(function(err, result) {
+		userModelObj.find({'_id':recId}).remove().exec(function(err, result) {
 			if (!err) {
 				res.send(result);
 			} else {
