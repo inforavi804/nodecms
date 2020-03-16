@@ -11,11 +11,13 @@ class AppController{
     * an instance of the controller
     */
    constructor(model){
+
 		this._model  = model;
 		//this.index   = this.index.bind(this);
 		this.create  = this.create.bind(this);
-		this.getList = this.getList.bind(this);
+		this.update  = this.update.bind(this);
 		this.delete  = this.delete.bind(this);
+		this.getList = this.getList.bind(this);
 	}
 
 	/**
@@ -68,25 +70,42 @@ class AppController{
     * @return {Object} res The response object
     */
     update(req, res, next){
-		var recId = req.params.id;
+
+		let recId = req.params.id;
+		let whereCond  = {'_id':recId};
 		let obj   = req.body;
+		let valueUpdate = {$set: {"name":"Sriram"}}; //{$set: req.body};
 		const validator = this._model.validateCreate(obj);
 
-		if (validator.passes()) {
+		console.log("outer section executing");
 
+		if (validator.passes() || true) {
+
+			console.log("If block section executing");
 			let userModelObj = this._model(obj);
-			userModelObj.find({'_id':recId}).update().exec(function(err, result) {
 
-				if (!err) {
-					res.send(result);
-					next(result);
-				} else {
-					res.send("Error ocurred on performing updaet operation", err);
-				};
-			});
+			userModelObj.updateMany(whereCond, {$set: {name:"ABCD"}}, function(err, result) {
+						if (!err) {
+							res.send(result);
+						} else {
+							throw err;
+							//res.send("Error ocurred on performing updaet operation", err);
+						};
+					});
+				  // 		.then((docs)=>{
+						// 	if(docs) {
+						// 	      resolve({success:true,data:docs});
+						// 	} else {
+						// 	      reject({success:false,data:"no such user exist"});
+						// 	}
+						// }).catch((err)=>{
+						// 	 reject(err);
+						// });
 		} else {
-			console.log(validator.errors.all());
-			//const appError = new AppError(CONSTANT.ERROR_TYPE, CONSTANT.BAD_REQUEST, validator.errors.all());
+
+			console.log("Else block section executing");
+
+			console.log("Validation error ocurred", validator.errors.all());
 			const appError = validator.errors.all();
 			// Passing errors to Express & returning it
 			res.send(appError);
@@ -104,7 +123,8 @@ class AppController{
 			if (!err) {
 				res.send(result);
 			} else {
-				res.send("Error ocurred on performing updaet operation", err);
+				throw err;
+				//res.send("Error ocurred on performing updaet operation", err);
 			};
 		}); 
 	}
