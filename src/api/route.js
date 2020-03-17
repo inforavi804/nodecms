@@ -18,7 +18,7 @@ route.get('/',  userCtrl.index);
 route.get('/users',  userCtrl.getList);
 route.post('/user/add', userCtrl.create);
 route.post('/user/update/:id', userCtrl.update);
-route.put('/user/delete/:id', userCtrl.delete);
+route.delete('/user/delete/:id', userCtrl.delete);
 
 
 export default route;

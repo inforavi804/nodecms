@@ -72,9 +72,10 @@ class AppController{
     update(req, res, next){
 
 		let recId = req.params.id;
-		let whereCond  = {'_id':recId};
+		//let whereCond  = {'_id':recId};
 		let obj   = req.body;
-		let valueUpdate = {$set: {"name":"Sriram"}}; //{$set: req.body};
+		//let valueUpdate = {$set: {"name":"Sriram"}}; //{$set: req.body};
+		//let valueUpdate = _.assign({ "updatedAt": new Date() }, obj);
 		const validator = this._model.validateCreate(obj);
 
 		console.log("outer section executing");
@@ -84,14 +85,41 @@ class AppController{
 			console.log("If block section executing");
 			let userModelObj = this._model(obj);
 
-			userModelObj.updateMany(whereCond, {$set: {name:"ABCD"}}, function(err, result) {
+			console.log("+-------------------+", obj);
+			let options = { upsert: true, new: true, setDefaultsOnInsert: true };
+
+
+
+			//userModelObj.findOneAndUpdate({ _id: req.params.id}, { $set: { 'name': "SumitKumar" } });
+
+
+			userModelObj.findByIdAndUpdate(req.params.id,
+				{ name: "Ashu" },
+				{new: true},
+				function(err, result) {
+				  	if (err) {
+						res.send(err);
+					} else {
+						res.send(result);
+				  	}
+				}
+			);
+
+
+			// userModelObj.findByIdAndUpdate(recId, {$set: obj}).exec().then( (doc) => {
+			// 	return this.toJSON(doc);
+			// });
+
+
+			/*function(err, result) {
 						if (!err) {
 							res.send(result);
 						} else {
-							throw err;
+							//throw err;
+							res.send(err);
 							//res.send("Error ocurred on performing updaet operation", err);
 						};
-					});
+					}); */
 				  // 		.then((docs)=>{
 						// 	if(docs) {
 						// 	      resolve({success:true,data:docs});
