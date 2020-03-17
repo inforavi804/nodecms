@@ -1,5 +1,6 @@
 //import AppError from '.././helper/AppError';
 import Url from 'url';
+import User from '.././models/User';
 import CONSTANT from '.././constants/constants';
 
 
@@ -73,62 +74,37 @@ class AppController{
 
 		let recId = req.params.id;
 		//let whereCond  = {'_id':recId};
-		let obj   = req.body;
+		let reqData   = req.body;
 		//let valueUpdate = {$set: {"name":"Sriram"}}; //{$set: req.body};
 		//let valueUpdate = _.assign({ "updatedAt": new Date() }, obj);
-		const validator = this._model.validateCreate(obj);
+		//const validator = this._model.validateCreate(obj);
 
 		console.log("outer section executing");
 
-		if (validator.passes() || true) {
+		//if (validator.passes() || true) {
+		if (true) {
 
 			console.log("If block section executing");
-			let userModelObj = this._model(obj);
+			//let userModelObj = this._model(reqData);
+			console.log("+------------------+");
+			console.log(req.params, req.body);
 
-			console.log("+-------------------+", obj);
-			let options = { upsert: true, new: true, setDefaultsOnInsert: true };
-
-
-
-			//userModelObj.findOneAndUpdate({ _id: req.params.id}, { $set: { 'name': "SumitKumar" } });
-
-
-			userModelObj.findByIdAndUpdate(req.params.id,
-				{ name: "Ashu" },
-				{new: true},
-				function(err, result) {
-				  	if (err) {
-						res.send(err);
+			User.updateMany({_id:req.params.id}, 
+				//{$set:{username:req.body.username, age:req.body.age}},
+				{$set:req.body},
+				{new:true}).then((res)=>{
+					if(res) {
+						 res.send(res);
+					     //resolve({success:true, data:res});
 					} else {
-						res.send(result);
-				  	}
-				}
-			);
-
-
-			// userModelObj.findByIdAndUpdate(recId, {$set: obj}).exec().then( (doc) => {
-			// 	return this.toJSON(doc);
-			// });
-
-
-			/*function(err, result) {
-						if (!err) {
-							res.send(result);
-						} else {
-							//throw err;
-							res.send(err);
-							//res.send("Error ocurred on performing updaet operation", err);
-						};
-					}); */
-				  // 		.then((docs)=>{
-						// 	if(docs) {
-						// 	      resolve({success:true,data:docs});
-						// 	} else {
-						// 	      reject({success:false,data:"no such user exist"});
-						// 	}
-						// }).catch((err)=>{
-						// 	 reject(err);
-						// });
+						 res.send(res);
+					     //reject({success:false, data:"no such user exist"});
+					}
+				}, (err) => {
+					console.log ('Error on save!', err);
+					return next(err);
+		        });
+	        
 		} else {
 
 			console.log("Else block section executing");
