@@ -1,7 +1,7 @@
 //import AppError from '.././helper/AppError';
 import Url from 'url';
 import User from '.././models/User';
-import CONSTANT from '.././constants/constants';
+//import CONSTANT from '.././constants/constants';
 
 
 class AppController{
@@ -14,7 +14,6 @@ class AppController{
    constructor(model){
 
 		this._model  = model;
-		
 		//this.index   = this.index.bind(this);
 		this.create  = this.create.bind(this);
 		this.update  = this.update.bind(this);
@@ -46,10 +45,10 @@ class AppController{
       	if (validator.passes()) {
 
 	        let object = new this._model(obj);
-	        object.save().then((savedObject) => {
+	        object.save().then((resObj) => {
 	               //const meta = getSuccessMeta();
 				   //return res.status(OK).json(formatResponse(meta, savedObject));
-				   res.send(object);
+				   res.send(resObj);
 	            }, (err) => {
 					console.log ('Error on save!', err);
 				    return next(err);
@@ -85,14 +84,13 @@ class AppController{
 					     reject({success:false, data:"no such user exist"});
 					}
 				}).catch((err) => {
+					res.send(err);
 					return next(err);
 		        });
 
 		} else {
-			//console.log("Validation error ocurred", validator.errors.all());
 			const appError = validator.errors.all();
-			//res.send(appError);
-			return next(appError);
+			res.send(appError);
 		}
 	}
 

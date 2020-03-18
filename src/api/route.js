@@ -10,7 +10,6 @@ const userCtrl = new UserController(UserModel);
 var app 	= express();
 var route 	= express.Router();
 
-
 //Router to display main file
 route.get('/',  userCtrl.index);
 
