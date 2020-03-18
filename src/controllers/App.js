@@ -14,6 +14,7 @@ class AppController{
    constructor(model){
 
 		this._model  = model;
+		
 		//this.index   = this.index.bind(this);
 		this.create  = this.create.bind(this);
 		this.update  = this.update.bind(this);
@@ -45,8 +46,7 @@ class AppController{
       	if (validator.passes()) {
 
 	        let object = new this._model(obj);
-	        object.save()
-	            .then((savedObject) => {
+	        object.save().then((savedObject) => {
 	               //const meta = getSuccessMeta();
 				   //return res.status(OK).json(formatResponse(meta, savedObject));
 				   res.send(object);
@@ -55,12 +55,11 @@ class AppController{
 				    return next(err);
 	            });
 	    } else {
-	    	console.log(validator.errors.all());
-			//const appError = new AppError(CONSTANT.ERROR_TYPE, CONSTANT.BAD_REQUEST, validator.errors.all());
+	    	//console.log(validator.errors.all());
 			const appError = validator.errors.all();
 			// Passing errors to Express & returning it
-			res.send(appError);
-			//return next(appError);
+			//res.send(appError);
+			return next(appError);
 	    }
 	}
 
@@ -73,53 +72,34 @@ class AppController{
     update(req, res, next){
 
 		let recId = req.params.id;
-		//let whereCond  = {'_id':recId};
+		let whereCond  = {'_id':recId};
 		let reqData   = req.body;
-		//let valueUpdate = {$set: {"name":"Sriram"}}; //{$set: req.body};
-		//let valueUpdate = _.assign({ "updatedAt": new Date() }, obj);
-		//const validator = this._model.validateCreate(obj);
+		const validator = this._model.validateCreate(reqData);
+		
+		if (validator.passes()) {
 
-		console.log("outer section executing");
-
-		//if (validator.passes() || true) {
-		if (true) {
-
-			console.log("If block section executing");
-			//let userModelObj = this._model(reqData);
-			console.log("+------------------+");
-			console.log(req.params, req.body);
-
-			User.updateMany({_id:req.params.id}, 
-				//{$set:{username:req.body.username, age:req.body.age}},
-				{$set:req.body},
-				{new:true}).then((res)=>{
-					if(res) {
-						 res.send(res);
-					     //resolve({success:true, data:res});
+			User.updateMany(whereCond, {$set:reqData}, {new:true}).then((response)=>{
+					if(response) {
+						 res.send(response);
 					} else {
-						 res.send(res);
-					     //reject({success:false, data:"no such user exist"});
+					     reject({success:false, data:"no such user exist"});
 					}
-				}, (err) => {
-					console.log ('Error on save!', err);
+				}).catch((err) => {
 					return next(err);
 		        });
-	        
+
 		} else {
-
-			console.log("Else block section executing");
-
-			console.log("Validation error ocurred", validator.errors.all());
+			//console.log("Validation error ocurred", validator.errors.all());
 			const appError = validator.errors.all();
-			// Passing errors to Express & returning it
-			res.send(appError);
-			//return next(appError);
+			//res.send(appError);
+			return next(appError);
 		}
 	}
 
 	/**
     * @param {Object} req The request object
     * @param {Object} res The response object
+    * @param {function} next The callback to the next program handler
     */
 	getList(req, res, next){
 		let userModelObj = this._model;
@@ -128,7 +108,6 @@ class AppController{
 				res.send(result);
 			} else {
 				throw err;
-				//res.send("Error ocurred on performing updaet operation", err);
 			};
 		}); 
 	}
@@ -136,6 +115,7 @@ class AppController{
 	/**
     * @param {Object} req The request object
     * @param {Object} res The response object
+    * @param {function} next The callback to the next program handler
     */
     delete(req, res, next){
 		var recId = req.params.id;
@@ -146,7 +126,7 @@ class AppController{
 			if (!err) {
 				res.send(result);
 			} else {
-				// error handling
+				throw err;
 			};
 		}); 
 	}
