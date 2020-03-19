@@ -26,7 +26,6 @@ class AppController{
     * @param {Object} res The response object
     * @param {function} next The callback to the next program handler
 	*/
-
 	index(req, res) {
 		res.send("+------------ Request to the main route path ----------------+");
 	}
