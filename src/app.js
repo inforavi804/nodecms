@@ -4,6 +4,7 @@ import cors from 'cors';
 import config from '.././config/config';
 import {dbConnect} from '.././config/dbConnect';
 import route from  '.././src/api/route';
+import passport from 'passport';
 
 //import Logger from './loaders/logger';
 
@@ -18,6 +19,10 @@ async function startServer() {
 	app.use(bodyParser.urlencoded({extended: true}));
 	//cross origin request handles
 	app.use(cors())
+
+	//using passport authntication moddleware
+	app.use(passport.initialize());
+	app.use(passport.session());
 	//including routes here
 	app.use(route);
 

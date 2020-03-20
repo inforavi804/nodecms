@@ -2,6 +2,9 @@ import AppController from '../controllers/app';
 import User from '.././models/User';
 import UserController from '../controllers/User';
 import passport from 'passport';
+import LocalStrategy from 'passport-local';
+
+//var LocalStrategy = passportlocal.Strategy;
 
 class LoginController extends AppController{
 
