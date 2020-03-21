@@ -10,7 +10,6 @@ import passport from 'passport';
 
 var app = express();
 
-
 async function startServer() {
 
 	// support json encoded bodies

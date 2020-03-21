@@ -1,10 +1,13 @@
+
 import AppController from '../controllers/app';
 import User from '.././models/User';
 import UserController from '../controllers/User';
 import passport from 'passport';
-import LocalStrategy from 'passport-local';
+import passportlocal from 'passport-local';
 
-//var LocalStrategy = passportlocal.Strategy;
+import Logger from 'logger';
+import { verify } from 'jsonwebtoken';
+
 
 class LoginController extends AppController{
 
@@ -13,7 +16,7 @@ class LoginController extends AppController{
 		super(model);
         this.login = this.login.bind(this);
     }
-    
+
 
     /**
     * @param {Object} req The request object
@@ -21,27 +24,19 @@ class LoginController extends AppController{
     * @param {function} next The callback to the next program handler
 	*/
     login(req, res, next){
+
+        const LocalStrategy = passportlocal.Strategy;
+        var options = {
+            usernameField : 'username', 
+            passwordField : 'password', 
+            passReqToCallback: true
+        };
+        
         let username = req.body.username;
         let password = req.body.password;
-
-        //passport.authenticate('local', { failureRedirect: '/login' }),
-        console.log(username, '+------- Outer -------+', password);
-        passport.use(new LocalStrategy(function(username, password, done) {
-
-                console.log(username, '+------- Inner -------+', password);
-                User.findOne({ username: username }, function (err, user) {
-                    if (err) { return done(err); }
-                    if (!user) { return done(null, false); }
-                    if (!user.verifyPassword(password)) { 
-                        return done(null, false); 
-                    }
-                    return done(null, user);
-                });
-            }
-        ));
-    }
     
-
+        
+    }
 }
 
 
