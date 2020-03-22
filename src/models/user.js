@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
 import Validator from 'validatorjs';
+import jwt from 'jsonwebtoken';
+import Constant from '../constants/constants';
 
 const UserSchema = new mongoose.Schema({
 	name: {
 		type: String,
-     	//required: [true, 'Please enter a full name'],
      	index: true,
 	},
 	username: {
@@ -16,7 +17,6 @@ const UserSchema = new mongoose.Schema({
 		lowercase: true,
 		unique: true,
 		index:true,
-		//required: true,
 		trim: true
 	},
 	password: String,
@@ -35,7 +35,24 @@ UserSchema.statics.validateCreate = (obj) => {
 	   email: 'required'
 	};
 	return new Validator(obj, rules);
- };
+};
+
+UserSchema.methods.validPassword = function( pwd ) {
+    return ( this.password === pwd );
+};
+
+UserSchema.methods.generateJwt = function() {
+
+	var expiry = new Date();
+	expiry.setDate(expiry.getDate() + 7);
+	
+	return jwt.sign({
+			_id: this._id,
+			email: this.email,
+			name: this.name,
+			exp: parseInt(expiry.getTime() / 1000),
+	}, Constant.AWT_PUBLIC_SECRET);
+};
 
 const User = mongoose.model('User', UserSchema);
 export default User;

@@ -29,11 +29,11 @@ const passwordHash = bcrypt.hashSync(myPlaintextPassword, salt)
 
 
 passport.serializeUser(function (user, cb) {
-  cb(null, user.username)
+    cb(null, user.username)
 })
 
 passport.deserializeUser(function (username, cb) {
-  findUser(username, cb)
+    findUser(username, cb)
 })
 
 
@@ -41,18 +41,21 @@ function initPassport(req, res) {
     passport.use(new LocalStrategy((username, password, done) => {
       
 
-        console.log('+--------------- Local Strategy Worked --------------------------+')
+        console.log(username, '+---------- Local Strategy Worked ------------+', password)
         UserModel.findOne({ username: username }).then(function(response) {
+            console.log('+---------- UserModel Response ------------+', response)
             if (!response) {
                 return done(null, false, { message: "Incorrect Username!."});
             }
-              // If there is a user with the given username, but the password the user gives us is incorrect
+            // If there is a user with the given username, but the password the user gives us is incorrect
             else if (!response.validPassword(password)) {
                 return done(null, false, { message: "Incorrect password."});
             }
             // If none of the above, return the user
             return done(null, response);
         });
+
+
           // findUser(username, (err, user) => {
           //       if (err) {
           //         return done(err)

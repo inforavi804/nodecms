@@ -9,7 +9,6 @@ const envFound = dotenv.config();
 
 export default{
 
-
 	port: parseInt(process.env.PORT, 10),
 	dbURL: process.env.MONGODB_URI,
 	logs: {
@@ -22,5 +21,5 @@ export default{
     	apiKey: 'API key from mailing API',
     	domain: 'Domain Name from mailing API'
   	}
-
+	
 }

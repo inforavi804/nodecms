@@ -15,22 +15,24 @@ const loginCtrl = new LoginController(UserModel);
 
 var app 	= express();
 var route 	= express.Router();
+var user = new UserModel();
 Auth.init(app);
+
+
+
 
 //Router to display main file
 route.get('/',  userCtrl.index);
-//route.post('/login', loginCtrl.login);
-route.post('/login', (req, res) => {
+route.post('/login', loginCtrl.login);
 
-    console.log('+------- login requested -----------+');
-    passport.authenticate('local', function (err, user, info) {    
+/*route.post('/login', (req, res) => {
+    passport.authenticate('local', function(err, success, info) {    
 
-        console.log(req.body, err, user, info);
-
+        //console.log(err, '+------+', success,  '+------+', info);
         if (err) {
             return res.status(401).json(err);
         }
-        if (user) {
+        if (success) {
             const token = user.generateJwt();
             return res.status(200).json({
                 "token": token
@@ -39,7 +41,7 @@ route.post('/login', (req, res) => {
             res.status(401).json(info);
         }
     })(req, res)
-});
+}); */
 
 //Router to perform operation on users
 route.get('/users',  userCtrl.getList);

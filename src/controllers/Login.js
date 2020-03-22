@@ -1,19 +1,21 @@
 
 import AppController from '../controllers/app';
-import User from '.././models/User';
+import UserModel from '.././models/User';
 import UserController from '../controllers/User';
 import passport from 'passport';
 import passportlocal from 'passport-local';
 
-import Logger from 'logger';
-import { verify } from 'jsonwebtoken';
+var user = new UserModel();
+//import Logger from 'logger';
+//import { verify } from 'jsonwebtoken';
 
 
 class LoginController extends AppController{
 
 
 	constructor(model){
-		super(model);
+        super(model);
+
         this.login = this.login.bind(this);
     }
 
@@ -34,7 +36,23 @@ class LoginController extends AppController{
         
         let username = req.body.username;
         let password = req.body.password;
-    
+
+        console.log('Controller method worked');
+        passport.authenticate('local', function(err, success, info) {    
+
+            console.log(err, '+------+', success,  '+------+', info);
+            if (err) {
+                return res.status(401).json(err);
+            }
+            if (success) {
+                const token = user.generateJwt();
+                return res.status(200).json({
+                    "token": token
+                });
+            } else {
+                res.status(401).json(info);
+            }
+        })(req, res);
         
     }
 }
