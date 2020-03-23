@@ -39,7 +39,7 @@ class LoginController extends AppController{
 
         console.log('Controller method worked');
         passport.authenticate('local', function(err, success, info) {    
-
+            
             console.log(err, '+------+', success,  '+------+', info);
             if (err) {
                 return res.status(401).json(err);

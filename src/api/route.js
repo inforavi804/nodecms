@@ -25,24 +25,6 @@ Auth.init(app);
 route.get('/',  userCtrl.index);
 route.post('/login', loginCtrl.login);
 
-/*route.post('/login', (req, res) => {
-    passport.authenticate('local', function(err, success, info) {    
-
-        //console.log(err, '+------+', success,  '+------+', info);
-        if (err) {
-            return res.status(401).json(err);
-        }
-        if (success) {
-            const token = user.generateJwt();
-            return res.status(200).json({
-                "token": token
-            });
-        } else {
-            res.status(401).json(info);
-        }
-    })(req, res)
-}); */
-
 //Router to perform operation on users
 route.get('/users',  userCtrl.getList);
 route.post('/user/add', userCtrl.create);
