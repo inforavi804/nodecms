@@ -63,14 +63,17 @@ class LoginController extends AppController{
 
         let obj = req.body;
 
-        console.log('+------1-------+', obj.password);
+        //console.log('+------1-------+', obj.password);
         const salt = await bcrypt.genSalt(20);
-        console.log('+------5-------+', salt);
-        obj.password = await bcrypt.hash(obj.password, salt);
-        console.log('+------10-------+', obj.password);
+        //console.log('+------5-------+', salt);
+        var hashPassword = async function(){
+            var hashPwd = bcrypt.hash(obj.password, 10);
+            return hashPwd;
+        }
 
+        obj.password = await hashPassword();
+        //console.log('+------10-------+', obj);
       	const validator = this._model.validateCreate(obj);  
-
       	if (validator.passes()) {
 
 	        let object = new this._model(obj);
