@@ -27,7 +27,7 @@ route.post('/login', loginCtrl.login);
 
 //Router to perform operation on users
 route.get('/users',  userCtrl.getList);
-route.post('/user/add', userCtrl.create);
+route.post('/user/add', loginCtrl.register);
 route.post('/user/update/:id', userCtrl.update);
 route.delete('/user/delete/:id', userCtrl.delete);
 

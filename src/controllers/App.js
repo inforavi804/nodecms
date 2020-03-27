@@ -1,6 +1,6 @@
 //import AppError from '.././helper/AppError';
 import Url from 'url';
-import User from '.././models/User';
+import User from '../models/User';
 //import CONSTANT from '.././constants/constants';
 
 
@@ -34,7 +34,6 @@ class AppController{
     * @param {Object} req The request object
     * @param {Object} res The response object
     * @param {function} next The callback to the next program handler
-    * @return {Object} res The response object
     */
 	create(req, res, next){
 

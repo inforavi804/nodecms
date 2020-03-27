@@ -31,7 +31,6 @@ async function startServer() {
 		app.listen(config.port, err=>{
 
 			if (err) {
-
 				//Logger.error(err);
 				console.log(err);
 	      		process.exit(1);
