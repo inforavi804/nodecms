@@ -6,6 +6,7 @@ import passport from 'passport';
 import passportlocal from 'passport-local';
 import bcrypt from 'bcrypt';
 
+
 var user = new UserModel();
 //import Logger from 'logger';
 //import { verify } from 'jsonwebtoken';
@@ -27,14 +28,14 @@ class LoginController extends AppController{
     login(req, res, next){
 
         const LocalStrategy = passportlocal.Strategy;
-        var options = {
-            usernameField : 'username', 
-            passwordField : 'password', 
-            passReqToCallback: true
-        };
+        // var options = {
+        //     usernameField : 'username', 
+        //     passwordField : 'password', 
+        //     passReqToCallback: true
+        // };
         
-        let username = req.body.username;
-        let password = req.body.password;
+        // let username = req.body.username;
+        // let password = req.body.password;
 
         console.log('Controller method worked');
         passport.authenticate('local', function(err, success, info) {    
@@ -64,7 +65,7 @@ class LoginController extends AppController{
         let obj = req.body;
 
         //console.log('+------1-------+', obj.password);
-        const salt = await bcrypt.genSalt(20);
+        //const salt = await bcrypt.genSalt(20);
         //console.log('+------5-------+', salt);
         var hashPassword = async function(){
             var hashPwd = bcrypt.hash(obj.password, 10);
@@ -93,6 +94,14 @@ class LoginController extends AppController{
 			return next(appError);
 	    }
     }
+
+    // function hashPassword(password) {
+    //     return new Promise(function(res, rej) {
+    //         var hashPwd = bcrypt.hash(password, 10);
+    //         if(hashPwd)
+    //             res(hashPwd)
+    //     })
+    // }
 }
 
 
